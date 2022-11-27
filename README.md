@@ -1,14 +1,18 @@
 # What is a proof-of-reserves audit
 
-With cryptocurrency exchanges the saying goes: "Not your keys, not your coins". Proof of reserves shows whether customer funds are safe, meaning that sufficient funds are backing all deposits. If all clients decided to withdraw all their crypto holdings the exchange will enough to process everyone's withdrawal requests.
+With cryptocurrency exchanges the saying goes: "Not your keys, not your coins". Proof of reserves provides an indication of whether customer funds are safe, meaning that sufficient funds are backing all deposits. If all clients decided to withdraw all their crypto holdings the exchange will have enough liquidity to process everyone's withdrawal requests.
+
+# What is a proof-of-liabilities audit
+
+Proof of reserves can give you an indication of the amount of assets under the exchanges' control. But if the exchange holds 10 bitcoin while clients deposited 20 bitcoin, then their liabilities exceed their assets. We therefore have to determine how much bitcoin is owed to users and compare the amount to the reserves in order to determine the health of the exchange. The best process to determine total liabilities, is to have a trusted, external auditor view all client balances. The auditor should then construct a Merkle Tree by including all of the client balances into the base layer (leaves) of the tree. By doing this, it enables every client of the exchange to independently and mathematically verify that his account balances were included in the audit.
 
 # What is a hash
 
-Calculating the hash of some input data prodoces a seemingly random string of characters that are unique to that input data. If you change any character of the input data the resulting hash will be completely different.
+Calculating the hash of some input data prodoces a pseudorandom string of characters that are unique to that input data. If you change any character of the input data the resulting hash will be completely different.
 
-For our application the most notable hashin gfunction is SHA256 (Secure Hashing Algorithm). It takes input data of any length and produces a hash of length 256 bits which can be presented as 64 hexadecimal characters. The number of combinations between 256 bits are in the order of 10^77; the number of atoms in the visible universe is 10^80, only 1000 times bigger.
+For our application, we use SHA256 (Secure Hashing Algorithm). It takes input data of any length and produces a hash of length 256 bits which can be presented as 64 hexadecimal characters. The number of possible combinations in 256 bits are in the order of 10^77, which is a mere 1000 times less than the amount of atoms in the visible universe (10^80). To produce a colission in SHA256 (2 different inputs producing the same SHA256 output) you would need to conduct about 2^63 operations, which means that the algorithm should be secure for at least another 100 years.
 
-We use a double SHA256 (SHA256d) hash for increased security against... 
+We use a double SHA256 (SHA256d) hash to build the Merkle Trees. This is to add another layer of security.
 
 # What is a merkle tree
 
