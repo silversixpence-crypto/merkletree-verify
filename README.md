@@ -3,7 +3,7 @@
 A Merkle Tree is a privacy-preserving data structure that uses hash proofs to store and manage large datasets. 
 It uses these hash functions to construct layers of nodes that build a tree-like structure with several layers of decreasing size, until only a single node remains. This node is called the Merkle Root.
 There is no industry standard on how to generate Merkle Trees, so many different customized versions may exist. 
-The Silver Sixpence Merkle Tree Generator uses its own approach, but can easily be modified on several parameters based on customer demand. 
+The *Silver Sixpence Merkle Tree Generator* uses its own approach, but can easily be modified on several parameters based on customer demand. 
 
 Our standard methodology is as follows:
 The Silver Sixpence Merkle Tree Generator generates the leaf nodes by concatenating a client ID, a random salt, an Audit ID and asset balances. It then calculates a SHA256 hash on the result:
