@@ -42,28 +42,18 @@ In the diagram below, the width of the tree is two and the height is 3. The data
 
 
 
-The standard implementation of Silver Sixpence Merkle Tree Generator, however, uses a width of 4, because some exchanges could potentially have millions of accounts which would result in a tree with more than 20 levels. If the width is increased to 4, then the height of the tree reduces by around 50%. The following diagram shows a tree with 16 leaves and width 4, producing a height of 3:
+The Silver Sixpence Merkle Tree generator also has the capability to generate trees with width 4, which lowers the total height of the tree. This is, however a non-standard methodology and only done upon customer request. 
 
-![Image2](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/2_Width4Tree.png)
+![Image2](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/10_width2wifth4comparison.png)
 
-Parent_node = SHA256(concat(child1, child2, child3, child4))
+If the number of leaves or nodes on a particular height is not a multiple of the tree width (i.e. #leaves(mod(width)) != 0), then the last node is duplicated and move up by one level, so that there are always 2 children nodes to every parent node.
 
-If we display the same dataset next to each other, one could visualize the reduction in height if the width is increased:
-
-![Image3](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/3_WidthTreeCompare.png)
-
-The reason for choosing a tree width of 4 is simply to provide a better user experience when displaying the Merkle Proofs. A lower tree height displays better on a smaller screen size.
-
-If the number of leaves or nodes on a particular height is not a multiple of the tree width (i.e. #leaves(mod(width)) != 0), then the last node is duplicated and the resulting nodes concatenated so that there are always 4 children nodes to every parent node.
-The tree below was built from a dataset with 13 leaf nodes, so the last node had to be duplicated 3 times so that it can be divided by 4:
+The tree below was built from a dataset with 9 leaf nodes, so the last node had to be duplicated and moved from layer 4 to layer 3. But since Layer 3 also has an uneven amount of nodes, the last one is duplicated again and moved to layer 2. Layer 2 then ends up with 3 nodes, so the last node is duplicated one again and moves to layer 1. It is then hashed with its neighbor to produce the parent node of layer 0 (which is the Merkle Root in this case).
 
 
-![Image4](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/4_NodeDuplicate.png)
 
+![Image4](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/11_9leafsTree.png)
 
-We produce the last parent node on Layer 1 as follows:
-
-Parent_node = SHA256256(concat(child1, child2, child2, child2))
 
 We do single SHA256 hashes all the child nodes to produce parents.
 
@@ -73,7 +63,7 @@ Consider a dataset of 40 accounts. 10% (four) dummy accounts are generated with 
 Each node is then grouped with 3 neighboring nodes, concatenated and hashed to build the next layer. This step is repeated until only a single node remains, the Merkle Root.
 
 
-![Image5](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/5_NodeDummyAccounts.png)
+![Image5](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/12_BigWidth2Tree.png)
 
 A user could verify that his/her account data was included in the total dataset that was included in the tree, by independently reproducing the Root from its account data.
 
@@ -124,20 +114,22 @@ Here, she is presented with a  field from which she can search for her Merkle Le
 
 **Step 2: Build the first Branch**
 
-*SixpenceCoin* has 20 million clients, so a Merkle Tree that hashes 2 nodes together would be 25 levels high. The auditor for *SixpenceCoin* decided to increase the Merkle Tree width to 4, which means that 4 child nodes are each concatenated to produce the parent node. This reduces the tree height to 13 levels, which displays better on smaller screens and requires less code to validate.
+*SixpenceCoin* has 20 million clients, so a Merkle Tree that hashes 2 nodes would be 25 levels high. 
 
-Amoné already has one of the four leaves required to build the first branch – the one that he produced herself. She therefore needs hashes from three of her neighboring accounts. These hashes, together with their sequence, are provided by the auditor on their web-application. Amoné concatenates the four leaf nodes in their correct order and hashes the result to produce the first branch.
+Amoné already has one of the two leaves required to build the first branch – the one that she produced herself. She therefore needs hashes from three of her neighboring accounts. These hashes, together with their sequence, are provided by the auditor on their web-application. Amoné concatenates the four leaf nodes in their correct order and hashes the result to produce the first branch.
 
-![Image7](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/7_ChildParentNodes.png)
+
+![Image7](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/13_Node21Node22Tree.png)
 
 
 **Step 3: Repeat**
 
-Amoné now needs to repeat the process of concatenating nodes to build the next branch. The auditor will provide 3 neighboring children nodes for every level, which Amoné needs to concatenate to produce the parent node. This step is repeated until only a single node remains, which is called the Merkle Root. If she successfully managed to reproduce the public Merkle Root, then she can be certain that her asset balances were included in the total liabilities that were observed by the auditor.
+Amoné now needs to repeat the process of concatenating nodes to build the next branch. The auditor will provide the neighboring child node for every level, which Amoné needs to concatenate to produce the parent node. This step is repeated until only a single node remains, which is called the Merkle Root. If she successfully managed to reproduce the public Merkle Root, then she can be certain that her asset balances were included in the total liabilities that were observed by the auditor.
+
 The complete tree structure will look like the image below. Note that the auditor will only reveal the minimum amount of information for Amoné to do independent verification, which is the nodes highlighted in green below. The rest of the nodes are kept private, as they are not needed for full verification.
 
 
-![Image8](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/8_UserVerifyTree.png)
+![Image8](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/14_Width2MerkleProof.png)
 
 The auditor website displays Amoné’s proof as a tower of vertical hashes. This is simply done to provide a better user experience. Since the auditor stores the client balances, they might display that to Amoné as well, if the exchange gave them the necessary permission.
 
