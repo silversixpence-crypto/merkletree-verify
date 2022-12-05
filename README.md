@@ -134,7 +134,7 @@ The complete tree structure will look like the image below. Note that the audito
 The auditor website displays Amoné’s proof as a tower of vertical hashes. This is simply done to provide a better user experience. Since the auditor stores the client balances, they might display that to Amoné as well, if the exchange gave them the necessary permission.
 
 
-![Image9](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/9_SSfrontend.png)
+![Image9](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/15_exchangeFrontend.png)
 
 
 # FAQ
