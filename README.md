@@ -106,9 +106,9 @@ Account_Record = concat(Account_ID + Salt + Audit_ID + Client Balances)
 Account_Record = "287e29b8-de5b-4924-8906-b216f2d48cd62A496ECE PORNOV22BTC=76.83|ETH=19.26|XRP=68.95|USDC=6.32"
 ```
 
-Amoné copies the Account_Record string and heads over to  [https://silversixpence.co.za/](https://silversixpence.co.za/) where she pastes the string into the form and verifies the hash that SixpenceCoin displays in her profile. 
+Amoné copies the Account_Record string and heads over to  [https://silversixpence.io/](https://merkle.silversixpence.io/) where she pastes the string into the form and verifies the hash that SixpenceCoin displays in her profile. 
 
-She then directs to the Auditors’ website [https://www.mazars.co.za/] (https://www.mazars.co.za/) and navigates to the *SixpenceCoin* November 2022 audit page.
+She then directs to the Auditors’ website [https://www.mazars.com/] (https://www.mazars.com/) and navigates to the *SixpenceCoin* November 2022 audit page.
 
 Here, she is presented with a  field from which she can search for her Merkle Leaf hash. The web application builds her unique tree path with all the hashes to the Root. Amoné is now ready to do a Merkle-Proof.
 
