@@ -1,4 +1,4 @@
-config-README.md-config.js
+[README](https://github.com/silversixpence-crypto/merkletree-verify/pull/7)
 # Silver Sixpence Merkle Tree Generator
 
 A Merkle Tree is a privacy-preserving data structure that uses hash proofs to store and manage large datasets. 
