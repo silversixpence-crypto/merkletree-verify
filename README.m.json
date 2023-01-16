@@ -109,7 +109,7 @@ Account_Record = concat(Account_ID + Salt + Audit_ID + Client Balances)
 Account_Record = "287e29b8-de5b-4924-8906-b216f2d48cd62A496ECE PORNOV22BTC=76.83|ETH=19.26|XRP=68.95|USDC=6.32"
 ```
 
-Amoné copies the Account_Record string and heads over to  [https://silversixpence.io/master:/main](https://merkle.silversixpence.io/lostleolotus-main:/) where she pastes the string into the form and verifies the hash that SixpenceCoin displayed in her profile. The web application builds her unique tree path with all the hashes to the Root. Amoné is now ready to do a Merkle-Proof.
+Amoné copies the Account_Record string and heads over to  [https://silversixpence.io/master:/main](https://merkle.silversixpence.io/lostleolotus-main:/README.m.json/README.md) where she pastes the string into the form and verifies the hash that SixpenceCoin displayed in her profile. The web application builds her unique tree path with all the hashes to the Root. Amoné is now ready to do a Merkle-Proof.
 
 **Step 2: Build the first Branch**
 
