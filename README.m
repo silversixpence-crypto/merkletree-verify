@@ -1,4 +1,4 @@
-config.js
+config-README.md-config.js
 # Silver Sixpence Merkle Tree Generator
 
 A Merkle Tree is a privacy-preserving data structure that uses hash proofs to store and manage large datasets. 
