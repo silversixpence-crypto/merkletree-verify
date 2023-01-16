@@ -1,3 +1,4 @@
+config-README.md-config.json
 # Silver Sixpence Merkle Tree Generator
 
 A Merkle Tree is a privacy-preserving data structure that uses hash proofs to store and manage large datasets. 
@@ -10,23 +11,25 @@ The Silver Sixpence Merkle Tree Generator generates the leaf nodes by concatenat
 
 Client_ID: Unique client identifier. Can be an ID number or hash of the username
 
-Example: ```Client_ID = "287e29b8-de5b-4924-8906-b216f2d48cd6"```
+ ```Client_ID = "e535cf418ab603cc4b338069a814037d53,
+
+c50bf37dc5776631f3d9c3110e08af"```
 
 Client_Balances = (Asset1=Balance | Asset2=Balance | Asset3=Balance ...)
 
-Example: ```Client_Balances = "BTC=76.83|ETH=19.26|XRP=68.95|USDC=6.32"```
+```Client_Balances = "BTC=|ETH=|XRP=|USDC="```
 
 Salt is a random string of arbitrary length to ensure the uniqueness of all leaves.
 
-Example: ```Salt = "2A496ECE"```
+```Salt = "e535cf418"```
 
 Audit_ID is a unique identifier for the audit that took place.
 
-Example: ```Audit_ID = "PORNOV22"```
+```Audit_ID = "PORNOV22"```
 
 Account_Record = concat(Account_ID + Salt + Audit_ID + Client Balances)
 
-Example: ```Account_Record = "287e29b8-de5b-4924-8906-b216f2d48cd62A496ECE PORNOV22BTC=76.83|ETH=19.26|XRP=68.95|USDC=6.32"```
+```Account_Record = "287e29b8-de5b-4924-8906-b216f2d48cd62A496ECE PORNOV22BTC=76.83|ETH=19.26|XRP=68.95|USDC=6.32"```
 
 Leaf = SHA256(Account_Record)
 
@@ -106,7 +109,7 @@ Account_Record = concat(Account_ID + Salt + Audit_ID + Client Balances)
 Account_Record = "287e29b8-de5b-4924-8906-b216f2d48cd62A496ECE PORNOV22BTC=76.83|ETH=19.26|XRP=68.95|USDC=6.32"
 ```
 
-Amoné copies the Account_Record string and heads over to  [https://silversixpence.io/](https://merkle.silversixpence.io/) where she pastes the string into the form and verifies the hash that SixpenceCoin displayed in her profile. The web application builds her unique tree path with all the hashes to the Root. Amoné is now ready to do a Merkle-Proof.
+Amoné copies the Account_Record string and heads over to  [https://silversixpence.io/master:/main](https://merkle.silversixpence.io/lostleolotus-main:/) where she pastes the string into the form and verifies the hash that SixpenceCoin displayed in her profile. The web application builds her unique tree path with all the hashes to the Root. Amoné is now ready to do a Merkle-Proof.
 
 **Step 2: Build the first Branch**
 
