@@ -10,8 +10,10 @@ The Silver Sixpence Merkle Tree Generator generates the leaf nodes by concatenat
 
 Client_ID: Unique client identifier. Can be an ID number or hash of the username
 
+```c++
 Example: ```Client_ID = "287e29b8-de5b-4924-8906-b216f2d48cd6"```
 
+```
 Client_Balances = (Asset1=Balance | Asset2=Balance | Asset3=Balance ...)
 
 Example: ```Client_Balances = "BTC=76.83|ETH=19.26|XRP=68.95|USDC=6.32"```
