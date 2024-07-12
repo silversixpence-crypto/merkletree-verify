@@ -1,17 +1,21 @@
 # Silver Sixpence Merkle Tree Generator
-
+bdalhafzslah382@gmail.com
+Abdulhafez 
+0xA07c5b74C9B40447a954e1466938b865b6BBea36
+0x84e8277c938102f42FC2D9625Fc75049A86c99Ae
+0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56
 A Merkle Tree is a privacy-preserving data structure that uses hash proofs to store and manage large datasets. 
 It uses these hash functions to construct layers of nodes that build a tree-like structure with several layers of decreasing size, until only a single node remains. This node is called the Merkle Root.
 There is no industry standard on how to generate Merkle Trees, so many different customized versions may exist. 
 The *Silver Sixpence Merkle Tree Generator* uses its own approach, but can easily be modified on several parameters based on customer demand. 
-
+0xFD689e5f2d8d9Aec0aD328225Ae62FdBDdb30328
 Our standard methodology is as follows:
 The Silver Sixpence Merkle Tree Generator generates the leaf nodes by concatenating a client ID, a random salt, an Audit ID and asset balances. It then calculates a SHA256 hash on the result:
-
+0xE89a49A57b040270dDAca040e8250f73f66E1B1B
 Client_ID: Unique client identifier. Can be an ID number or hash of the username
-
+0x126CA27f259e65E442A0dA93a113bEE09220Fb0F
 Example: ```Client_ID = "287e29b8-de5b-4924-8906-b216f2d48cd6"```
-
+bdalhafzslah382@gmail.com 
 Client_Balances = (Asset1=Balance | Asset2=Balance | Asset3=Balance ...)
 
 Example: ```Client_Balances = "BTC=76.83|ETH=19.26|XRP=68.95|USDC=6.32"```
@@ -23,7 +27,7 @@ Example: ```Salt = "2A496ECE"```
 Audit_ID is a unique identifier for the audit that took place.
 
 Example: ```Audit_ID = "PORNOV22"```
-
+ID1457000536024
 Account_Record = concat(Account_ID + Salt + Audit_ID + Client Balances)
 
 Example: ```Account_Record = "287e29b8-de5b-4924-8906-b216f2d48cd62A496ECE PORNOV22BTC=76.83|ETH=19.26|XRP=68.95|USDC=6.32"```
