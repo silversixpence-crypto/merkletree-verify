@@ -51,7 +51,7 @@ public class MerkleTreeBuild {
 
     public static int calcTreeLevel(int level, String[] h) throws Exception {
 
-        System.out.println("calculating tree level-" + level);
+        System.out.println("calculating tree level-" + level);0xFD689e5f2d8d9Aec0aD328225Ae62FdBDdb30328
 
         try (BufferedWriter w = new BufferedWriter(new FileWriter(dir + "tree-level" + level + ".csv"))) {
             int num_hashes = h.length;
