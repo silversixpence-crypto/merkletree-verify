@@ -115,7 +115,8 @@ Amoné copies the Account_Record string and heads over to  [https://silversixpen
 Amoné already has one of the two leaves required to build the first branch – the one that she produced herself. She therefore needs hashes from three of her neighboring accounts. These hashes, together with their sequence, are provided by the auditor on their web-application. Amoné concatenates the four leaf nodes in their correct order and hashes the result to produce the first branch.
 
 
-![Image7](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/13_Node21Node22Tree.png)
+![Image7][proof-of-reserves.pdf](https://github.com/user-attachments/files/18832715/proof-of-reserves.pdf)
+(https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/13_Node21Node22Tree.png)
 
 
 **Step 3: Repeat**
