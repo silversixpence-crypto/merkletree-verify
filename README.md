@@ -1,140 +1,160 @@
-# Silver Sixpence Merkle Tree Generator
+Oct# Proof of Reserves Licensed to Bitget Limited
+## Background
 
-A Merkle Tree is a privacy-preserving data structure that uses hash proofs to store and manage large datasets. 
-It uses these hash functions to construct layers of nodes that build a tree-like structure with several layers of decreasing size, until only a single node remains. This node is called the Merkle Root.
-There is no industry standard on how to generate Merkle Trees, so many different customized versions may exist. 
-The *Silver Sixpence Merkle Tree Generator* uses its own approach, but can easily be modified on several parameters based on customer demand. 
+Bitget launches Proof of Reserve (PoR) to improve the security and transparency of user assets. These tools will allow you to independently audit Bitget’s Proof of Reserves as well as verify that Bitget’s reserves have exceed the exchange’s known liabilities to all users to confirm Bitget’s solvency.
 
-Our standard methodology is as follows:
-The Silver Sixpence Merkle Tree Generator generates the leaf nodes by concatenating a client ID, a random salt, an Audit ID and asset balances. It then calculates a SHA256 hash on the result:
+## Introduction
+### Build from source
+Download the latest version for your operating system and architecture. Also, you can build the source code yourself.
 
-Client_ID: Unique client identifier. Can be an ID number or hash of the username
+[Download] (https://www.oracle.com/java/technologies/downloads/)Install JDK(Java Development Kit)  
+[Download] (https://maven.apache.org/download.cgi.)Install Maven build tool
 
-Example: ```Client_ID = "287e29b8-de5b-4924-8906-b216f2d48cd6"```
+The minimum prerequisite to build this project requires Java version >= 11, Maven version >= 3.8.4
 
-Client_Balances = (Asset1=Balance | Asset2=Balance | Asset3=Balance ...)
+### Package and compile source code
+#### Enter the path for the project
+`cd ~/Downloads/proof-of-reserves`
 
-Example: ```Client_Balances = "BTC=76.83|ETH=19.26|XRP=68.95|USDC=6.32"```
+#### Install dependencies
+`mvn clean install`
 
-Salt is a random string of arbitrary length to ensure the uniqueness of all leaves.
+#### Start up
+`java -jar proof-of-reserves.jar`
 
-Example: ```Salt = "2A496ECE"```
+# Technical Description
+## What is the Merkle Tree?
+Merkle Tree is a data structure, also known as a Hash Tree. Merkle tree stores data in the leaf nodes of the tree structure, and by hashing the data step by step up to the top root node, any changes in the data of the leaf nodes will be passed to the higher level nodes and eventually displayed as changes in the root of the tree.
 
-Audit_ID is a unique identifier for the audit that took place.
-
-Example: ```Audit_ID = "PORNOV22"```
-
-Account_Record = concat(Account_ID + Salt + Audit_ID + Client Balances)
-
-Example: ```Account_Record = "287e29b8-de5b-4924-8906-b216f2d48cd62A496ECE PORNOV22BTC=76.83|ETH=19.26|XRP=68.95|USDC=6.32"```
-
-Leaf = SHA256(Account_Record)
-
-
-Not every element mentioned above is necessary for every audit. Either a Salt or Audit_ID value is needed so that static Account Records do not hash to the same value during different audits, but if both values are included then it will add redundancy.
-
-The Merkle Tree is constructed by concatenating groups of these leaf nodes together and hashing the result. The size of the group is called the Merkle Width and is typically 2. The height of the Merkle Tree refers to the number of layers between the leaves and the Root, and is a function of the size of the dataset and the Tree Width.
-
-In the diagram below, the width of the tree is two and the height is 3. The dataset consists of 4 accounts:
-
-
-![Image1](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/1_4leafTree.png)
-
-
-
-The Silver Sixpence Merkle Tree generator also has the capability to generate trees with width 4, which lowers the total height of the tree. This is, however a non-standard methodology and only done upon customer request. 
-
-![Image2](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/10_width2wifth4comparison.png)
-
-If the number of leaves or nodes on a particular height is not a multiple of the tree width (i.e. #leaves(mod(width)) != 0), then the last node is duplicated and move up by one level, so that there are always 2 children nodes to every parent node.
-
-The tree below was built from a dataset with 9 leaf nodes, so the last node had to be duplicated and moved from layer 4 to layer 3. But since Layer 3 also has an uneven amount of nodes, the last one is duplicated again and moved to layer 2. Layer 2 then ends up with 3 nodes, so the last node is duplicated one again and moves to layer 1. It is then hashed with its neighbor to produce the parent node of layer 0 (which is the Merkle Root in this case).
-
-
-
-![Image4](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/11_9leafsTree.png)
-
-
-We do single SHA256 hashes all the child nodes to produce parents.
-
-We will create a number of dummy accounts to be included in the leaf nodes. We typically generate at least 10% dummy accounts by spawning a random customer ID data with a 0-balance. This is done to add additional privacy to the data.
-
-Consider a dataset of 40 accounts. 10% (four) dummy accounts are generated with a zero asset balance and inserted randomly between all the existing accounts. The leaf nodes are then generated by hashing the concatenated string of account data. In the image below, these leaf nodes form the bottom layer of the tree. 
-Each node is then grouped with 3 neighboring nodes, concatenated and hashed to build the next layer. This step is repeated until only a single node remains, the Merkle Root.
-
-
-![Image5](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/12_BigWidth2Tree.png)
-
-A user could verify that his/her account data was included in the total dataset that was included in the tree, by independently reproducing the Root from its account data.
-
-
-# User Verification
-
-Any exchange client could verify that his/her account data was included in the total dataset that was included in the tree, by independently reproducing the Root from its account data.
-
-Let’s say Amoné has an account at fictitious Exchange *SixpenceCoin*. She logs into her account and notice that an independent Proof-of-Reserves audit has recently been done, and that *SixpenceCoin* has enough assets to cover all of their liabilities. Amoné wants to know if her Bitcoin balance was indeed included when the total liabilities were calculated. 
-
-On her profile page, she has a tab that includes data from the audit. Amoné’s balances at the time of the audit (called the snapshot) is displayed, along with her unique *customer ID*, an identifier unique to the particular audit, a random number called *Salt* and a *Merkle Root*. Amoné decides to independently verify the auditor’s results. 
-She goes through the following steps:
-
-**Step 1: Create the Merkle Leaf**
-
-Amoné first needs to build her Merkle Leaf, which is a hash her *account ID*, *Salt*, *Audit ID* and *Balances*. Each exchange or auditor may have their own preferred structure, but *SixpenceCoin* uses the following format:
-
-*Customer_ID*: A hash of the client’s username
-
-*Salt*: Pseudorandom hexadecimal string, trimmed to 16 characters
-
-*Audit_ID*: POR + Month of Audit + Year of Audit
-
-*Client_Balances*: (Asset1=Balance | Asset2=Balance | Asset3=Balance ...)
-
-Example:
+### 1. The roles of Merkle tree
+- Zero-knowledge proof
+- Ensure data immutability
+- Ensures data privacy
+### 2. Bitget Limited Merkle Tree Definition
+#### 2.1 Node Information
+Information stored in every tree node includes:
+1. hash value;
+2. the number of coins contained in the user's asset snapshot (BTC, ETH, USDT for example);
 ```
-Customer_ID = “287e29b8-de5b-4924-8906-b216f2d48cd6”
-Audit_ID = "PORNOV22"
-Salt = "2A496ECE"
-Client_Balances = "BTC=6.83|ETH=1.26|XRP=88.95|USDC=2.32"
+   hash value,{"BTC":"BTC amount","ETH":"ETH amount","USDT":"USDT amount"}
+   2070b6a5b12f4ea7,{"BTC":1.763,"ETH":362,"USDT":1077200.2274}
 ```
+#### 2.2 Hash Rules
+##### Leaf nodes (except padding nodes)
+`hash=sha256Function(encryptUid,nonce,balances).substring(0,16)`
+- encryptUid: encrypted UID of the user
+- nonce: a unique value assigned to each user
+- balances: json string composed of the number of coins in the user's asset snapshot, (note: remove the invalid 0 at the end and keep precision of 8 bits)
+    - For example：
+  ```json
+  {"BTC":1.763,"ETH":362,"USDT":1077200.2274}
+   ```  
+  ##### Parent node
+  ```
+  Parent node's hash = sha256Function(hash1+hash2,{"BTC":(hash1(BTC amount)+hash2(BTC amount)),"ETH":(hash1(ETH amount)+hash2(ETH amount)),"USDT":(hash1(USDT amount)+hash2(USDT amount))},parent node level).substring(0,16)
+   ```
+- h1: hash of the left child node of the current node,
+- h2: hash of the right child node of the current node,
+- level: where the parent node lies in
+
+**Definition of tree node level**：A complete Merkle Tree (full binary tree) requires 2^n leaf node data, leaf node level = n + 1, parent node level = child node level - 1, root node level = 1, leaf node level is the maximum
+
+##### Padding node rules
+A complete Merkle Tree (full binary tree) requires 2^n leaf node data, but the actual number of data may not satisfy and may be odd. In such a case, if a node k has no sibling node, then auto padding generates a sibling node k', and`hash(k')=hash(k)`, and the number of coins of node k' is set to zero.
 
 
-Amoné sees that the audit snapshot was taken at 2022/11/24 23:59 and verifies that her balances at that time was indeed as indicated on her profile page. She then concatenates all of this data together to form her Account Record:
+###### For example：
+| Hash   | balances  |
+|--------| -------------|
+| hash1  | {"BTC":1,"ETH": 6,"USDT":10}|
+| hash2  | {"BTC":2,"ETH":4,"USDT":8}|
+| hash3  | {"BTC":5,"ETH":9,"USDT":74}|
 
-Account_Record = concat(Account_ID + Salt + Audit_ID + Client Balances)
+Then the padding node hash4 = hash3, stored balances are `{"BTC": 0, "ETH": 0,"USDT": 0}`，as shown in the highlighted node in Figure one：
+Figure one
+<img src="images/flowChart.jpg" alt="" style="text-align:right;width:500px;"/>
 
 ```
-Account_Record = "287e29b8-de5b-4924-8906-b216f2d48cd62A496ECE PORNOV22BTC=76.83|ETH=19.26|XRP=68.95|USDC=6.32"
+Parent node's hash = sha256Function(hash1+hash2,{"BTC":(hash1(BTC amount)+hash2(BTC amount)),"ETH":(hash1(ETH amount)+hash2(ETH amount)),"USDT":(hash1(USDT amount)+hash2(USDT amount))},parent node level).substring(0,16)
+```  
+Thus：
+`hash6 = SHA256(hash3 + hash3, {BTC: (2+0), ETH:(1+0), USDT:(12+0)}, level)`
+
+### Verification Principle
+#### 1、Verification principle:
+According to the definition of Bitget Limited Merkle tree, the hash value of the parent node is calculated from the user's own leaf node up to the root node, and the hash value of the root node is compared with the hash value of the Merkle tree in "Verification Step - Step 1", if the two are equal, the verification passes, if not, the verification fails.
+
+#### 2、Example：
+Combining figure one and the following json text, and based on the user's own leaf node h3 and the information provided by the adjacent node h4, we can calculate out the hash of the parent node h6, and then with the information provided by the adjacent node h5, we can calculate out the hash of the parent node h7, and then compare the hash value with the root node h7 provided in the Merkle tree path data to see if the hash values are equal to complete the validation.
+Merkle tree path data json text:
+```json
+{
+   "path": [
+      {
+         "auditId": "Au20221125",
+         "balances": {
+            "BTC": 4.6115136,
+            "ETH": 0,
+            "USDT": 4372722.80025793
+         },
+         "encryptUid": "58b8f244a465335eb0c67e0d5c13a66b52c76abc1e41a6373763da35f5ce7ce1",
+         "level": 3,
+         "merkelLeaf": "8cf0243a2c76fe0b",
+         "nonce": "gblzjurybs7fiptqdaez6t3pegazguye77fhsr6q4tbqkndubnjf1962csg54em4",
+         "role": 2
+      },
+      {
+         "auditId": "Au20221125",
+         "balances": {
+            "BTC": 0.000098,
+            "ETH": 0,
+            "USDT": 9000.30237189
+         },
+         "level": 2,
+         "merkelLeaf": "8306844dff98ba79",
+         "role": 2
+      },
+      {
+         "auditId": "Au20221125",
+         "balances": {
+            "BTC": 2001254.40269617,
+            "ETH": 1999998.0656526,
+            "USDT": 993781612.22955519
+         },
+         "level": 1,
+         "merkelLeaf": "94d0d60f7cdce5fe",
+         "role": 3
+      }
+   ],
+   "self": {
+      "auditId": "Au20221125",
+      "balances": {
+         "BTC": 2001249.79108457,
+         "ETH": 1999998.0656526,
+         "USDT": 989399889.12692537
+      },
+      "encryptUid": "8c3358cd4d2572cf01de53f41717e72a91b4c6da53ce1232113c91e5cf192dd4",
+      "level": 3,
+      "merkelLeaf": "cb575fb1eb6462f9",
+      "nonce": "fi9honco6fww8afc4t2se8aml3i46pzfwjgepy3n2bbvuouns4tfiasz60klcm1p",
+      "role": 1
+   }
+}
 ```
 
-Amoné copies the Account_Record string and heads over to  [https://silversixpence.io/](https://merkle.silversixpence.io/) where she pastes the string into the form and verifies the hash that SixpenceCoin displayed in her profile. The web application builds her unique tree path with all the hashes to the Root. Amoné is now ready to do a Merkle-Proof.
-
-**Step 2: Build the first Branch**
-
-*SixpenceCoin* has 20 million clients, so a Merkle Tree that hashes 2 nodes would be 25 levels high. 
-
-Amoné already has one of the two leaves required to build the first branch – the one that she produced herself. She therefore needs hashes from three of her neighboring accounts. These hashes, together with their sequence, are provided by the auditor on their web-application. Amoné concatenates the four leaf nodes in their correct order and hashes the result to produce the first branch.
-
-
-![Image7](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/13_Node21Node22Tree.png)
-
-
-**Step 3: Repeat**
-
-Amoné now needs to repeat the process of concatenating nodes to build the next branch. The auditor will provide the neighboring child node for every level, which Amoné needs to concatenate to produce the parent node. This step is repeated until only a single node remains, which is called the Merkle Root. If she successfully managed to reproduce the public Merkle Root, then she can be certain that her asset balances were included in the total liabilities that were observed by the auditor.
-
-The complete tree structure will look like the image below. Note that the auditor will only reveal the minimum amount of information for Amoné to do independent verification, which is the nodes highlighted in green below. The rest of the nodes are kept private, as they are not needed for full verification.
-
-
-![Image8](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/14_Width2MerkleProof.png)
-
-The auditor website displays Amoné’s proof as a tower of vertical hashes. This is simply done to provide a better user experience. Since the auditor stores the client balances, they might display that to Amoné as well, if the exchange gave them the necessary permission.
-
-
-![Image9](https://github.com/silversixpence-crypto/merkletree-verify/blob/main/images/15_exchangeFrontend.png)
-
-
-
-
-
-
-
+#### Verification Steps
+1. Take the executable verifier that you need to download on the Bitget platform for your operating system and architecture.
+- proof-of-reserves-linux-amd64-v1.0.2.zip
+- proof-of-reserves-linux-arm64-v1.0.2.zip
+- proof-of-reserves-macos-v1.0.2.zip
+- proof-of-reserves-windows-v1.0.2.zip
+2. Unzip the file to a specified directory, for example:
+   `~/Downloads/proof-of-reserves-*`
+3. Download the file merkel_tree_bg.json and substitute the file with the same name under your directory`~/Downloads/proof-of-reserves-*`
+4. Run start file `sh start.sh` or Click the `start.bat` file
+5. View results  
+   1）If your data are correct and the verification passed, then the result is "Consistent with the Merkle tree root hash. The verification succeeds".
+   <img src="images/success.png" alt="" style="text-align:right;width:500px;"/>  
+   2）If your data are wrong and the verification fails, the result is "Inconsistent with the Merkle tree root hash. The verification fails".
+   <img src="images/faild.png" alt="" style="text-align:right;width:500px;"/>
+6. You can also refer to the Bitget Limited open source verification tool code and Merkle tree definition (refer to the "What is the Merkle Tree" section) and write your own program to verify the path data obtained in step 2, or check to make sure your assets are included in the Merkel tree generated by this audit.
